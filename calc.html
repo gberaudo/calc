@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+ <head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+   <title>Au pays des mulplications</title>
+   <style>
+     #tables span {
+       background-color: lightblue;
+       display: inline-block;
+       width: 4rem;
+       text-align: center;
+       cursor: pointer;
+       line-height: 4rem;
+       font-size: xx-large;
+       margin: 1rem;
+       border-radius: 25px;
+       border: 3px solid green;
+     }
+     #tables span.selected {
+       background-color: lightgreen;
+     }
+     #jeu {
+       font-size:600%;
+     }
+  </style>
+ </head>
+ <body>
+  <h1>Es-tu fort/forte en mulplications?</h1>
+   <div id="tables">
+     <span>2</span>
+     <span>3</span>
+     <span>4</span>
+     <span>5</span>
+     <span>6</span>
+     <span>7</span>
+     <span>8</span>
+     <span>9</span>
+   </div>
+  <div id="jeu" style="display: none"><span id="operation">?</span> = <span id="solution">?</span></div>
+
+   <script>
+   const tables = document.querySelectorAll('#tables span');
+   const operation = document.querySelector('#operation');
+   const solution = document.querySelector('#solution');
+   const jeu = document.querySelector('#jeu');
+
+   let selected = [];
+
+   for (const table of tables) {
+     table.addEventListener('click', function() {
+       table.classList.toggle('selected');
+       selected = Array.from(tables).filter(f => f.classList.contains('selected')).map(f => +f.innerText);
+       jeu.style.display = 'block';
+     });
+   }
+
+   function tirerUnEntierAuxDés(min, max) {
+     return Math.floor(Math.random() * (max - min + 1) + min);
+   }
+
+   function tirerUneValeurDuTableauAuxDés(tableau) {
+     return  tableau[Math.floor(Math.random() * tableau.length)];
+   }
+
+   setInterval(function() {
+     if (selected.length) {
+       const a = tirerUnEntierAuxDés(1, 10);
+       const b = tirerUneValeurDuTableauAuxDés(selected);
+       afficherOperation(a, b);
+       programmerAffichageSolution(a * b, 2500);
+     }
+   }, 5000);
+
+   function afficherOperation(a, b) {
+     operation.innerHTML = `${a} x ${b}`;
+     solution.innerHTML = '?';
+   }
+
+   const sourires = ['^^', ':)', ';)'];
+   function programmerAffichageSolution(resultat, délais) {
+     setTimeout(function () {
+       solution.innerHTML = `${resultat} ${tirerUneValeurDuTableauAuxDés(sourires)}`;
+     }, délais);
+   }
+   </script>
+
+ </body>
+</html>
